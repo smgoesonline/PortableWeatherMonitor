@@ -15,7 +15,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 #define BZZPIN D7             //Buzzer operated through this pin.
 #define HMDPIN D3             //humidity LED pin
 #define TMPPIN D4             //temperature LED pin
-#define LHTPIN A0             //LDR pin
 
 DHT dht(DHTPIN, DHTTYPE);     //Function which initialises pin and type
 
@@ -24,7 +23,6 @@ void setup() {
   pinMode(BZZPIN, OUTPUT);
   pinMode(TMPPIN, OUTPUT);
   pinMode(HMDPIN, OUTPUT);
-  pinMode(LHTPIN,INPUT);
   dht.begin();
 
 
@@ -42,8 +40,6 @@ void loop() {
   //read temperature and humidity
   float t = dht.readTemperature();
   float h = dht.readHumidity();
-  float l = analogRead(A0);
-  float lu  = 10*l;
 
   if(t>50){
     digitalWrite(BZZPIN,HIGH);
@@ -68,12 +64,10 @@ void loop() {
   if (isnan(h) || isnan(t)) {
     Serial.println("Failed to read from DHT sensor!");      //Tells Serial Monitor on the PC that DHT is not connected and needs to be diagnosed.
   }
-  Serial.println("Temperature and Humidity and Lumens:");              //Prints Temperature and Humidity
+  Serial.println("Temperature and Humidity:");              //Prints Temperature and Humidity
   Serial.print(t);
   Serial.print(",");
-  Serial.print(h);
-  Serial.print(",");
-  Serial.println(lu);
+  Serial.println(h);
 
 
 
@@ -104,13 +98,6 @@ void loop() {
   display.print(h);
   display.print(" %"); 
 
-  // display light level 
-  display.setTextSize(1);
-  display.setCursor(10, 45);
-  display.print("Lumens:");
-  display.setTextSize(1);
-  display.setCursor(50, 45);
-  display.print(lu);
 
   display.display(); 
 }
